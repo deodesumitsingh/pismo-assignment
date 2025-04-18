@@ -9,3 +9,8 @@ func NewHandler[T any](service T) *Handler[T] {
 		service: service,
 	}
 }
+
+type ApplicationHandler struct {
+	AccountHandler     *AccountHandler
+	TransactionHandler *TransactionHandler
+}
