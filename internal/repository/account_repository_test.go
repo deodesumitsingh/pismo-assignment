@@ -11,16 +11,14 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-type tests struct {
-	name          string
-	setup         func(r repository.AccountRepository)
-	input         string
-	expectedData  model.Account
-	expectedError error
-}
-
 func TestAccountRepositoryMem_Create(t *testing.T) {
-	tests := []tests{
+	tests := []struct {
+		name          string
+		setup         func(r repository.AccountRepository)
+		input         string
+		expectedData  model.Account
+		expectedError error
+	}{
 		{
 			name: "failure_account_number_already_exists",
 			setup: func(r repository.AccountRepository) {
@@ -55,7 +53,13 @@ func TestAccountRepositoryMem_Create(t *testing.T) {
 }
 
 func TestAccountRepositoryMem_AccountById(t *testing.T) {
-	tests := []tests{
+	tests := []struct {
+		name          string
+		setup         func(r repository.AccountRepository)
+		input         string
+		expectedData  model.Account
+		expectedError error
+	}{
 		{
 			name:          "failure_account_number_doesnt_exists",
 			setup:         func(r repository.AccountRepository) {},
