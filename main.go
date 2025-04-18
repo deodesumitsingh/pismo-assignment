@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/deodesumitsingh/pismo/config"
-	"github.com/deodesumitsingh/pismo/internal/handler"
+	"github.com/deodesumitsingh/pismo/internal/api/handler"
 	"github.com/gin-gonic/gin"
 )
 

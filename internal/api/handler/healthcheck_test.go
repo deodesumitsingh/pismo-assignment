@@ -5,7 +5,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/deodesumitsingh/pismo/internal/handler"
+	"github.com/deodesumitsingh/pismo/internal/api/handler"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
 )
