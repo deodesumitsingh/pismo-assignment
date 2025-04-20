@@ -29,7 +29,7 @@ func (m *mockRepository) OperationTypeById(id int) (model.OperationType, error) 
 	return args.Get(0).(model.OperationType), args.Error(1)
 }
 
-func (m *mockRepository) Save(a model.Account, o model.OperationType, amount float64) (model.Transaction, error) {
+func (m *mockRepository) Save(a, o int, amount float64) (model.Transaction, error) {
 	args := m.Called(a, o, amount)
 	return args.Get(0).(model.Transaction), args.Error(1)
 }
@@ -116,7 +116,7 @@ func TestTransactionService_Save(t *testing.T) {
 			mockService: func(m *mockRepository) {
 				m.On("AccountById", 1).Return(account, nil)
 				m.On("OperationTypeById", 1).Return(operationType, nil)
-				m.On("Save", account, operationType, inputDebit.Amount).Return(transaction, nil)
+				m.On("Save", account.ID, operationType.ID, inputDebit.Amount).Return(transaction, nil)
 			},
 			expectedData:  transaction,
 			input:         inputDebit,

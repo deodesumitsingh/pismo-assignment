@@ -37,7 +37,7 @@ func NewTransactionService(p TransactionServiceParam) TransactionService {
 }
 
 func (s *TransactionServiceImpl) Create(req req.TransactionReq) (model.Transaction, error) {
-	account, err := s.accountDb.AccountById(req.AccountID)
+	_, err := s.accountDb.AccountById(req.AccountID)
 	if err != nil {
 		return model.Transaction{}, err
 	}
@@ -51,5 +51,5 @@ func (s *TransactionServiceImpl) Create(req req.TransactionReq) (model.Transacti
 		return model.Transaction{}, ErrAmountAndOperationTypeMismatch
 	}
 
-	return s.db.Save(account, operationType, req.Amount)
+	return s.db.Save(req.AccountID, req.OperationTypeId, req.Amount)
 }

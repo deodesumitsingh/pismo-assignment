@@ -22,3 +22,12 @@ type OperationType struct {
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
 }
+
+type Transaction struct {
+	ID              int32
+	Amount          float64
+	AccountID       int32
+	OperationTypeID int32
+	CreatedAt       time.Time
+	UpdatedAt       time.Time
+}
