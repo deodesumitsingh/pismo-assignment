@@ -14,3 +14,11 @@ type Account struct {
 	CreatedAt time.Time
 	UpdatedAt time.Time
 }
+
+type OperationType struct {
+	ID          int32
+	Description string
+	Mode        string
+	CreatedAt   time.Time
+	UpdatedAt   time.Time
+}

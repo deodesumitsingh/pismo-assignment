@@ -1,9 +1,12 @@
 package repository
 
 import (
+	"context"
+	"database/sql"
 	"errors"
 
 	"github.com/deodesumitsingh/pismo/config"
+	"github.com/deodesumitsingh/pismo/internal/database"
 	"github.com/deodesumitsingh/pismo/internal/model"
 )
 
@@ -17,6 +20,10 @@ type OperationRepository interface {
 
 type OperationRepositoryMem struct {
 	data map[int]model.OperationType
+}
+
+type OperationRepositoryDb struct {
+	db *database.Queries
 }
 
 func seedDataForInMemOperation() map[int]model.OperationType {
@@ -37,16 +44,37 @@ func seedDataForInMemOperation() map[int]model.OperationType {
 }
 
 func NewOperationRepository(c *config.AppConfig) OperationRepository {
+	if c.Db != nil {
+		return &OperationRepositoryDb{
+			db: database.New(c.Db),
+		}
+	}
 	return &OperationRepositoryMem{
 		data: seedDataForInMemOperation(),
 	}
 }
 
-func (o *OperationRepositoryMem) OperationTypeById(id int) (model.OperationType, error) {
-	operation, ok := o.data[id]
+func (r *OperationRepositoryMem) OperationTypeById(id int) (model.OperationType, error) {
+	operation, ok := r.data[id]
 	if !ok {
 		return model.OperationType{}, ErrOperationNotSupported
 	}
 
 	return operation, nil
+}
+
+func (r *OperationRepositoryDb) OperationTypeById(id int) (model.OperationType, error) {
+	operation, err := r.db.GetOperationById(context.Background(), int32(id))
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			err = ErrOperationNotSupported
+		}
+		return model.OperationType{}, err
+	}
+
+	return model.OperationType{
+		ID:          int(operation.ID),
+		Description: operation.Description,
+		Mode:        model.Mode(operation.Mode),
+	}, nil
 }
