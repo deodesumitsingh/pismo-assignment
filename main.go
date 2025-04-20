@@ -1,12 +1,16 @@
 package main
 
 import (
+	"database/sql"
+	"log"
+
 	"github.com/deodesumitsingh/pismo/config"
 	"github.com/deodesumitsingh/pismo/internal/api/handler"
 	v1 "github.com/deodesumitsingh/pismo/internal/api/handler/v1"
 	"github.com/deodesumitsingh/pismo/internal/repository"
 	"github.com/deodesumitsingh/pismo/internal/service"
 	"github.com/gin-gonic/gin"
+	_ "github.com/lib/pq"
 )
 
 var router = gin.Default()
@@ -41,6 +45,19 @@ func handlersV1(c *config.AppConfig) v1.ApplicationHandler {
 
 func main() {
 	c := config.NewAppConfig()
+
+	if c.DbURL != "" {
+		db, err := sql.Open("postgres", c.DbURL)
+		if err == nil {
+			err = db.Ping()
+		}
+		if err != nil {
+			log.Fatalf("Couldn't connect to database. Error: %s", err.Error())
+		}
+		defer db.Close()
+
+		c.Db = db
+	}
 
 	router.GET("/healthcheck", handler.HealthCheck)
 
