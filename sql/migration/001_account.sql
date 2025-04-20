@@ -1,0 +1,10 @@
+-- +goose Up 
+CREATE TABLE accounts (
+    id SERIAL PRIMARY KEY,
+    number TEXT NOT NULL UNIQUE,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, 
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+-- +goose Down
+DROP TABLE accounts;
